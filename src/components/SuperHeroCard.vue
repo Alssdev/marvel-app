@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" style="width: 14rem;">
+    <div class="card">
       <div class="card-img-container">
         <img class="card-img-top" :src="imageUrl" :alt="'Image of ' + name" />
       </div>
@@ -31,8 +31,16 @@ export default {
 };
 </script>
 <style scoped>
+.card {
+  transition: 0.3s;
+}
+
 .card-img-top {
-  height: 220px;
+  max-height: 250px;
   overflow: hidden;
+}
+
+.card:hover {
+  box-shadow: 0px 0px 13px -1px rgba(0, 0, 0, 0.75);
 }
 </style>
