@@ -8,13 +8,12 @@
         placeholder="Superhero name"
         aria-label="Superhero name"
         aria-describedby="basic-addon2"
-        @keyup="$emit('keyup', text)"
       />
       <div class="input-group-append">
         <button
           class="btn btn-danger"
           type="button"
-          @keyup="$emit('keyup', text)"
+          @click="$emit('keyup', text)"
         >
           Search
         </button>
@@ -34,6 +33,12 @@ export default {
 </script>
 
 <style scoped>
+input {
+  font-family: 'Yanone Kaffeesatz';
+  font-size: 20px;
+  font-weight: 300;
+}
+
 .btn-danger {
   background-color: red;
 }

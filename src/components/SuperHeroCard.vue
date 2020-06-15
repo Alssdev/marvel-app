@@ -32,6 +32,7 @@ export default {
 </script>
 <style scoped>
 .card {
+  margin-bottom: 30px;
   transition: 0.3s;
 }
 
@@ -42,5 +43,15 @@ export default {
 
 .card:hover {
   box-shadow: 0px 0px 13px -1px rgba(0, 0, 0, 0.75);
+}
+
+.card-body {
+  height: 100px;
+}
+
+.card-title {
+  font-family: 'Yanone Kaffeesatz';
+  font-size: 23px;
+  font-weight: 400;
 }
 </style>

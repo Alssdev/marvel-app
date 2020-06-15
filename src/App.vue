@@ -27,23 +27,26 @@
         </div>
       </div>
     </main>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination justify-content-center">
-        <li class="page-item">
-          <button class="page-link" href="#" tabindex="-1" @click="previusPage">
-            Previous
-          </button>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">{{ page }}</a>
-        </li>
-        <li class="page-item">
-          <button class=" btn page-link" href="#" @click="nextPage">
-            Next
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <footer>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <button class="btn page-link" href="#" @click="previusPage">
+              Previous
+            </button>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">{{ page }}</a>
+          </li>
+          <li class="page-item">
+            <button class=" btn page-link" href="#" @click="nextPage">
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+      <div class="footer-bar"></div>
+    </footer>
   </div>
 </template>
 
@@ -77,6 +80,7 @@ export default {
       const params = {
         nameStartsWith: this.search,
         orderBy: '-modified',
+        limit: 12,
         offset: this.superHerosIndex, // pagination
         ts: env.ts,
         apikey: env.apikey,
@@ -94,7 +98,11 @@ export default {
         });
     },
     getImageUrl: function(superHero) {
-      return superHero.thumbnail.path + '.' + superHero.thumbnail.extension;
+      return (
+        superHero.thumbnail.path +
+        '/standard_fantastic.' +
+        superHero.thumbnail.extension
+      );
     },
     searchData: function(text) {
       if (text) {
@@ -108,16 +116,16 @@ export default {
       this.fetchSuperHeros();
     },
     nextPage: function() {
-      if (this.superHerosIndex + 20 < this.maxSuperHerosIndex) {
-        this.superHerosIndex += 20;
+      if (this.superHerosIndex + 12 < this.maxSuperHerosIndex) {
+        this.superHerosIndex += 12;
         this.page += 1;
 
         this.fetchSuperHeros();
       }
     },
     previusPage: function() {
-      if (this.superHerosIndex - 20 >= 0) {
-        this.superHerosIndex -= 20;
+      if (this.superHerosIndex - 12 >= 0) {
+        this.superHerosIndex -= 12;
         this.page -= 1;
 
         this.fetchSuperHeros();
@@ -136,6 +144,11 @@ export default {
 @font-face {
   font-family: Marvel;
   src: url('./fonts/MarvelRegular-Dj83.ttf');
+}
+
+@font-face {
+  font-family: 'Yanone Kaffeesatz';
+  src: url('./fonts/YanoneKaffeesatz.ttf');
 }
 
 header {
@@ -160,5 +173,17 @@ header {
 
 main {
   margin-bottom: 40px;
+}
+
+.page-link {
+  color: red !important;
+}
+.page-link:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.5) !important;
+}
+
+.footer-bar {
+  height: 70px;
+  background-color: red;
 }
 </style>
