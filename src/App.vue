@@ -5,7 +5,7 @@
         <span class="navbar-brand mb-0 h1">MARVEL APP</span>
       </nav>
       <div class="container">
-        <search-bar @click="searchData($event)"></search-bar>
+        <search-bar @click="searchData($event)" :loading="loading"></search-bar>
       </div>
     </header>
     <main>
@@ -13,28 +13,36 @@
         <div class="columns is-deskto is-mobile is-tablet is-multiline is-centered">
           <div
             class="column is-12-mobile is-3-desktop is is-3-tablet"
-            v-for="superHero in superHeros"
-            :key="superHero.id"
+            v-for="character in characters"
+            :key="character.id"
           >
             <character-card
-              :imageUrl="getImageUrl(superHero)"
-              :name="superHero.name"
-              :uid="superHero.id"
+              :imageUrl="getImageUrl(character)"
+              :name="character.name"
+              :characterID="character.id"
+              @click="fetchOneCharacter($event)"
             ></character-card>
           </div>
         </div>
       </div>
     </main>
-    <div class="container">
-      <b-pagination
-        type="is-red"
-        :total="total"
-        :current.sync="page"
-        :per-page="16"
-        order="is-centered"
-      ></b-pagination>
-    </div>
-    <the-footer></the-footer>
+    <footer>
+      <div class="container">
+        <b-pagination
+          type="is-red"
+          :total="total"
+          :current.sync="page"
+          :per-page="16"
+          order="is-centered"
+        ></b-pagination>
+      </div>
+      <the-footer></the-footer>
+    </footer>
+    <the-modal
+      :isActive="isModalCardActive"
+      :character="characterSelected"
+      @deactivate="isModalCardActive=false"
+    ></the-modal>
   </div>
 </template>
 
@@ -43,35 +51,45 @@ import axios from "axios";
 import env from "./env";
 
 import CharacterCard from './components/CharacterCard';
-import SearchBar from './components/SearchBar';
+import TheSearchBar from './components/TheSearchBar';
 import TheFooter from './components/TheFooter';
+import TheModal from './components/TheModal';
 
 export default {
   name: "App",
 
   created: function() {
-    this.fetchSuperHeros();
+    this.fetchCharacters();
   },
 
   data: function() {
     return {
-      superHeros: [],
+      characters: [],
       search: null,
       page: 1,
       limit: 16,
       total: null,
-      superHeroSelected: null
+      loading: false,
+      isModalCardActive: false,
+      characterSelected: {
+        name: '',
+        description: '',
+        thumbnail: {
+          path: '',
+          extension: '',
+        }
+      },
     };
   },
 
   watch: {
     page: function() {
-      this.fetchSuperHeros();
+      this.fetchCharacters();
     }
   },
 
   methods: {
-    fetchSuperHeros: function() {
+    fetchCharacters: function() {
       const params = {
         nameStartsWith: this.search,
         orderBy: "-modified",
@@ -85,42 +103,66 @@ export default {
       axios
         .get(env.endPoint + "characters", { params })
         .then(response => {
-          this.superHeros = response.data.data.results;
+          this.characters = response.data.data.results;
           this.total = response.data.data.total;
+
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log(error);
+
+          this.loading = false;
+        });
+    },
+    fetchOneCharacter: function(characterID) {
+      const params = {
+        ts: env.ts,
+        apikey: env.apikey,
+        hash: env.hash
+      };
+
+      axios
+      .get(env.endPoint + "characters/" + characterID, { params })
+        .then(response => {
+          this.characterSelected = response.data.data.results[0];
+          
+          this.isModalCardActive = true;
         })
         .catch(error => {
           console.log(error);
         });
     },
-    getImageUrl: function(superHero) {
-      return (
-        superHero.thumbnail.path +
-        "/standard_fantastic." +
-        superHero.thumbnail.extension
-      );
+    getImageUrl: function(character) {
+      return character.thumbnail.path + '.' + character.thumbnail.extension
+
     },
     searchData: function(text) {
+      this.loading = true;
+
       if (text == '') {
         this.search = null;
+
       } else {
         this.search = text;
+
       }
 
       this.page = 1;
-      this.fetchSuperHeros();
+      this.fetchCharacters();
     },
   },
 
   components: {
     'character-card': CharacterCard,
     'the-footer': TheFooter,
-    'search-bar': SearchBar,
+    'search-bar': TheSearchBar,
+    'the-modal': TheModal,
   }
 };
 </script>
 
 <style lang="scss">
-@import "./css/bulma_styles.scss";
+@import "./css/bulma_styles.scss"; // bulma config
 
 @font-face {
   font-family: Marvel;
@@ -144,23 +186,7 @@ header {
   padding: 0px;
 }
 
-#searchBar {
-  margin-top: 30px;
-}
-
 main {
   margin-bottom: 40px;
-}
-
-.page-link {
-  color: red !important;
-}
-.page-link:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.5) !important;
-}
-
-.footer-bar {
-  height: 70px;
-  background-color: red;
 }
 </style>

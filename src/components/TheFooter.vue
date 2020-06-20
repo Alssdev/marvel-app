@@ -11,18 +11,13 @@
             target="_blank"
           >GitHub.</a>
         </p>
+        <p>Data provided by Marvel. © 2020 MARVEL</p>
       </div>
     </footer>
   </div>
 </template>
 
-<script>
-export default {
-  
-}
-</script>
-
-<style lang="scss" scoped>
+<style scoped>
 .app-name {
   color: #ffffff;
   font-size: 25px;

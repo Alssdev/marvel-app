@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="card">
+    <div class="card" @click="$emit('click', characterID)">
       <div class="card-image">
         <figure class="image">
-          <img :src="imageUrl" :alt="'image of ' + name" />
+          <img :src="imageUrl" :alt="imageAlt" />
         </figure>
       </div>
       <div class="card-content">
@@ -19,7 +19,8 @@
 
 <script>
 export default {
-  name: 'SuperHeroCard',
+  name: 'CharacterCard',
+
   props: {
     imageUrl: {
       type: String,
@@ -29,15 +30,21 @@ export default {
       type: String,
       required: true,
     },
-    uid: {
+    characterID: {
       type: Number,
       required: true,
     },
   },
+
+  computed: {
+    imageAlt: function() {
+      return 'image of ' + this.name;
+    }
+  },
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 
 .card-content {
@@ -57,5 +64,9 @@ export default {
 .title {
   font-family: "Open Sans", sans-serif;
   font-size: 20px;
+}
+
+.image img {
+  height: 257px;
 }
 </style>
