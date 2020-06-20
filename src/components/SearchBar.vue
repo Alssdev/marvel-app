@@ -1,22 +1,11 @@
 <template>
   <div>
-    <div class="input-group mb-3">
-      <input
-        v-model="text"
-        type="text"
-        class="form-control"
-        placeholder="Superhero name"
-        aria-label="Superhero name"
-        aria-describedby="basic-addon2"
-      />
-      <div class="input-group-append">
-        <button
-          class="btn btn-danger"
-          type="button"
-          @click="$emit('keyup', text)"
-        >
-          Search
-        </button>
+    <div class="field has-addons">
+      <div class="control is-expanded">
+        <input class="input" type="text" placeholder="Character name" v-model="text" />
+      </div>
+      <div class="control">
+        <button @click="$emit('click', text)" class="button is-red">Search</button>
       </div>
     </div>
   </div>
@@ -34,15 +23,6 @@ export default {
 
 <style scoped>
 input {
-  font-family: 'Yanone Kaffeesatz';
-  font-size: 20px;
-  font-weight: 300;
-}
-
-.btn-danger {
-  background-color: red;
-}
-.btn-danger:hover {
-  background-color: red;
+  transition: 0.2s;
 }
 </style>
