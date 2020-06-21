@@ -9,7 +9,12 @@
       </div>
     </header>
     <main>
-      <div class="container">
+      <div class="container has-text-centered">
+        <template v-if="IsCharacterListEmpty">
+          <h1 class="title is-1">No characters found yet.</h1>
+          <p class="subtitle is-3">¯\_(ツ)_/¯</p>
+        </template>
+
         <div class="columns is-deskto is-mobile is-tablet is-multiline is-centered">
           <div
             class="column is-12-mobile is-3-desktop is is-3-tablet"
@@ -26,7 +31,7 @@
         </div>
       </div>
     </main>
-    <footer>
+    <div class="site-footer">
       <div class="container">
         <b-pagination
           type="is-red"
@@ -37,7 +42,7 @@
         ></b-pagination>
       </div>
       <the-footer></the-footer>
-    </footer>
+    </div>
     <the-modal
       :isActive="isModalCardActive"
       :character="characterSelected"
@@ -58,8 +63,11 @@ import TheModal from './components/TheModal';
 export default {
   name: "App",
 
-  created: function() {
-    this.fetchCharacters();
+  components: {
+    'character-card': CharacterCard,
+    'the-footer': TheFooter,
+    'search-bar': TheSearchBar,
+    'the-modal': TheModal,
   },
 
   data: function() {
@@ -68,7 +76,7 @@ export default {
       search: null,
       page: 1,
       limit: 16,
-      total: null,
+      total: 5,
       loading: false,
       isModalCardActive: false,
       characterSelected: {
@@ -82,10 +90,20 @@ export default {
     };
   },
 
+  computed: {
+    IsCharacterListEmpty: function() {
+      return !this.total;
+    }
+  },
+
   watch: {
     page: function() {
       this.fetchCharacters();
     }
+  },
+
+  created: function() {
+    this.fetchCharacters();
   },
 
   methods: {
@@ -151,13 +169,6 @@ export default {
       this.fetchCharacters();
     },
   },
-
-  components: {
-    'character-card': CharacterCard,
-    'the-footer': TheFooter,
-    'search-bar': TheSearchBar,
-    'the-modal': TheModal,
-  }
 };
 </script>
 

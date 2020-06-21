@@ -23,12 +23,6 @@
 
 <script>
 export default {
-  data: function() {
-    return {
-
-    }
-  },
-
   props: {
     isActive: {
       type: Boolean,
@@ -37,6 +31,12 @@ export default {
     character: {
       type: Object
     },
+  },
+
+  data: function() {
+    return {
+
+    }
   },
 
   computed: {

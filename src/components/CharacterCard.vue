@@ -19,8 +19,6 @@
 
 <script>
 export default {
-  name: 'CharacterCard',
-
   props: {
     imageUrl: {
       type: String,

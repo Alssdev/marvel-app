@@ -8,10 +8,11 @@
         expanded
         :loading="loading"
         v-model="text"
+        @keyup.native="search($event.key)"
       ></b-input>
 
       <p class="control">
-        <button @click="$emit('click', text)" class="button is-red">Search</button>
+        <button @click="search('click')" class="button is-red">Search</button>
       </p>
     </b-field>
   </div>
@@ -19,16 +20,28 @@
 
 <script>
 export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    }
+  },
+
   data: function() {
     return {
       text: '',
     };
   },
+  
+  methods: {
+    search: function(command) {
+      if (command === 'Enter') {
+        this.$emit('click', this.text);
 
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
+      } else if (command === 'click') {
+        this.$emit('click', this.text);
+
+      }
     }
   }
 };
