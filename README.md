@@ -1,24 +1,45 @@
-# marvel-gallery
+# Marvel App
 
-## Project setup
+This great project consists of a web application that searches among all the active characters in the Marvel comics, showing a little information about each one as well as an image.
+
+## Project setup 🚀
+
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+## Pre requirement 📋
+
+After you have installed the dependencies, you **must** configure the file *"src / env.js"* and place the *keys* provided by the **Marvel API**.
+
+~~~
+  apikey: 'your public api key',
+  hash: 'a md5 digest of the ts parameter, your private key and your public key',
+~~~
+
+### Running the tests ⚙️
+
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compiles for production 📦
+
 ```
 npm run build
 ```
 
-### Lints and fixes files
+### Lints and fixes files 🔦
+
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Built with 🔨
+
++ [VueJS](https://vuejs.org/) - The web framework used
++ [Bulma](https://bulma.io/) and [Buefy](https://buefy.org/) - Used for styles
++ [Marvel API](https://developer.marvel.com/) - Data provider API
+
+## Authors 💻
++ **Alessandro Morales** - Full project builder - [@alssdev](https://twitter.com/alssdev)
