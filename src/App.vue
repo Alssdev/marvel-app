@@ -15,7 +15,9 @@
           <p class="subtitle is-3">¯\_(ツ)_/¯</p>
         </template>
 
-        <div class="columns is-deskto is-mobile is-tablet is-multiline is-centered">
+        <div
+          class="columns is-deskto is-mobile is-tablet is-multiline is-centered"
+        >
           <div
             class="column is-12-mobile is-3-desktop is is-3-tablet"
             v-for="character in characters"
@@ -46,14 +48,14 @@
     <the-modal
       :isActive="isModalCardActive"
       :character="characterSelected"
-      @deactivate="isModalCardActive=false"
+      @deactivate="isModalCardActive = false"
     ></the-modal>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import env from "./env";
+import axios from 'axios';
+import env from './env';
 
 import CharacterCard from './components/CharacterCard';
 import TheSearchBar from './components/TheSearchBar';
@@ -61,7 +63,7 @@ import TheFooter from './components/TheFooter';
 import TheModal from './components/TheModal';
 
 export default {
-  name: "App",
+  name: 'App',
 
   components: {
     'character-card': CharacterCard,
@@ -70,99 +72,94 @@ export default {
     'the-modal': TheModal,
   },
 
-  data: function() {
-    return {
-      characters: [],
-      search: null,
-      page: 1,
-      limit: 16,
-      total: 5,
-      loading: false,
-      isModalCardActive: false,
-      characterSelected: {
-        name: '',
-        description: '',
-        thumbnail: {
-          path: '',
-          extension: '',
-        }
+  data: () => ({
+    characters: [],
+    search: null,
+    page: 1,
+    limit: 16,
+    total: 5,
+    loading: false,
+    isModalCardActive: false,
+    characterSelected: {
+      name: '',
+      description: '',
+      thumbnail: {
+        path: '',
+        extension: '',
       },
-    };
-  },
+    },
+  }),
 
   computed: {
-    IsCharacterListEmpty: function() {
+    IsCharacterListEmpty() {
       return !this.total;
-    }
+    },
   },
 
   watch: {
-    page: function() {
+    page() {
       this.fetchCharacters();
-    }
+    },
   },
 
-  created: function() {
+  created() {
     this.fetchCharacters();
   },
 
   methods: {
-    fetchCharacters: function() {
+    async fetchCharacters() {
       const params = {
         nameStartsWith: this.search,
-        orderBy: "-modified",
+        orderBy: '-modified',
         limit: this.limit,
-        offset: (this.page * this.limit) - this.limit, // pagination
+        offset: this.page * this.limit - this.limit, // pagination
         ts: env.ts,
         apikey: env.apikey,
-        hash: env.hash
+        hash: env.hash,
       };
 
-      axios
-        .get(env.endPoint + "characters", { params })
-        .then(response => {
-          this.characters = response.data.data.results;
-          this.total = response.data.data.total;
-
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log(error);
-
-          this.loading = false;
+      this.loading = true;
+      try {
+        const response = await axios.get(env.endPoint + 'characters', {
+          params,
         });
+
+        this.characters = response.data.data.results;
+        this.total = response.data.data.total;
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
     },
-    fetchOneCharacter: function(characterID) {
+    async fetchOneCharacter(characterID) {
       const params = {
         ts: env.ts,
         apikey: env.apikey,
-        hash: env.hash
+        hash: env.hash,
       };
 
-      axios
-      .get(env.endPoint + "characters/" + characterID, { params })
-        .then(response => {
-          this.characterSelected = response.data.data.results[0];
-          
-          this.isModalCardActive = true;
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    getImageUrl: function(character) {
-      return character.thumbnail.path + '.' + character.thumbnail.extension
+      try {
+        const response = await axios.get(
+          env.endPoint + 'characters/' + characterID,
+          { params }
+        );
 
+        this.characterSelected = response.data.data.results[0];
+        this.isModalCardActive = true;
+      } catch (error) {
+        console.log(error);
+      }
     },
-    searchData: function(text) {
+    getImageUrl(character) {
+      return character.thumbnail.path + '.' + character.thumbnail.extension;
+    },
+    searchData(text) {
       this.loading = true;
 
       if (text == '') {
         this.search = null;
-
       } else {
         this.search = text;
-
       }
 
       this.page = 1;
@@ -173,11 +170,11 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./css/bulma_styles.scss"; // bulma config
+@import './css/bulma_styles.scss'; // bulma config
 
 @font-face {
   font-family: Marvel;
-  src: url("./fonts/MarvelRegular-Dj83.ttf");
+  src: url('./fonts/MarvelRegular-Dj83.ttf');
 }
 
 header {
