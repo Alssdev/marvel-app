@@ -127,7 +127,11 @@ export default {
         this.characters = response.data.data.results;
         this.total = response.data.data.total;
       } catch (error) {
-        console.log(error);
+        this.$buefy.notification.open({
+          message: 'There was an error communicating with the API',
+          duration: 5000,
+          type: 'is-danger',
+        });
       }
       this.loading = false;
     },
@@ -147,7 +151,11 @@ export default {
         this.characterSelected = response.data.data.results[0];
         this.isModalCardActive = true;
       } catch (error) {
-        console.log(error);
+        this.$buefy.notification.open({
+          message: 'There was an error communicating with the API',
+          duration: 5000,
+          type: 'is-danger',
+        });
       }
     },
     getImageUrl(character) {
